@@ -1,0 +1,246 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Poppins", sans-serif;
+}
+
+/* WRAPPER */
+.send-wrapper{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#e9e9ed,#0f0e47);
+}
+
+/* CONTAINER */
+.send-container{
+  width:800px;
+  height:420px;
+  display:flex;
+  border-radius:15px;
+  overflow:hidden;
+  background:white;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+
+  /* 🔥 PAGE LOAD ANIMATION */
+  animation: fadeZoom 0.8s ease;
+}
+
+/* LEFT */
+.send-left{
+  width:50%;
+  padding:30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:15px;
+}
+
+.send-left h2{
+  text-align:center;
+}
+
+.send-left input{
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+
+.send-left button{
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#031a76;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.send-left button:hover{
+  background:#02145a;
+}
+
+/* 🔥 RIGHT WITH S-CURVE + ANIMATION */
+.send-right{
+  width:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#031a76,#0f0e47);
+  color:white;
+
+  /* S-CURVE */
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    0 100%,
+    10% 80%,
+    20% 50%,
+    10% 20%
+  );
+
+  /* 🔥 SLIDE ANIMATION */
+  transform: translateX(100%);
+  opacity: 0;
+  animation: slideInRight 1s forwards ease-out;
+}
+
+/* 🔥 SLIDE KEYFRAMES */
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 🔥 FADE + ZOOM */
+@keyframes fadeZoom{
+  0%{
+    opacity:0;
+    transform: scale(0.95);
+  }
+  100%{
+    opacity:1;
+    transform: scale(1);
+  }
+}
+
+/* CARD */
+.send-card{
+  text-align:center;
+  z-index:1;
+}
+
+/* MESSAGE */
+.success-msg{
+  color:green;
+  text-align:center;
+  font-size: 14px;
+  padding: 8px;
+  background-color: #d4edda;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.error-msg {
+  color: #721c24;
+  text-align: center;
+  font-size: 14px;
+  padding: 8px;
+  background-color: #f8d7da;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+/* SUBTITLE */
+.subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* EMAIL INFO */
+.email-info {
+  text-align: center;
+  padding: 12px;
+  background-color: #e3f2fd;
+  border-left: 4px solid #031a76;
+  border-radius: 6px;
+  color: #031a76;
+  font-size: 14px;
+  margin: 15px 0;
+}
+
+/* TIMER SECTION */
+.timer-section {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.timer-text {
+  color: #666;
+  font-size: 14px;
+}
+
+.timer-text span {
+  font-weight: bold;
+  color: #031a76;
+}
+
+.resend-btn, .proceed-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #031a76;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 100%;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.resend-btn:hover, .proceed-btn:hover {
+  background: #02145a;
+  transform: translateY(-2px);
+}
+
+.resend-btn:disabled, .proceed-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* FOOTER LINKS */
+.footer-links {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links p {
+  text-align: center;
+  cursor: pointer;
+  color: #0f0e47;
+  font-weight: 500;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.footer-links p:hover {
+  color: #031a76;
+  text-decoration: underline;
+}
+
+/* SEND CARD BENEFITS */
+.send-card ul.benefits {
+  list-style: none;
+  margin-top: 20px;
+  text-align: left;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.send-card ul.benefits li {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: white;
+}
+
+/* BACK */
+.back{
+  text-align:center;
+  cursor:pointer;
+  color:#0f0e47;
+  font-weight:500;
+}

@@ -1,0 +1,132 @@
+/* PAGE WRAPPER */
+.course-details {
+  padding: 100px 60px;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* MAIN LAYOUT */
+.course-container {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+/* LEFT SIDE (IMAGE) */
+.course-image img {
+  width: 450px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* RIGHT SIDE (DETAILS) */
+.course-info {
+  max-width: 500px;
+}
+
+.course-info h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.instructor {
+  color: gray;
+  margin-bottom: 10px;
+}
+
+/* RATING */
+.rating {
+  color: #f4c150;
+  margin-bottom: 10px;
+}
+
+/* PRICE */
+.price {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+/* DESCRIPTION */
+.description {
+  line-height: 1.6;
+  color: #ccc;
+}
+
+/* BUTTON */
+.enroll-btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(45deg, #ff7a18, #ffb347);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.enroll-btn:hover {
+  transform: scale(1.05);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .course-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .course-image img {
+    width: 100%;
+  }
+
+  .course-info {
+    text-align: center;
+  }
+}
+
+
+/* VIDEO */
+.video-section video {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+/* CART BUTTON */
+.cart-btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 25px;
+  background: #a435f0;
+  color: white;
+  cursor: pointer;
+}
+
+/* CURRICULUM */
+.curriculum {
+  margin-top: 40px;
+}
+
+.accordion {
+  margin: 10px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.accordion-title {
+  background: #eee;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.accordion-content {
+  padding: 10px;
+  background: #f9f9f9;
+}
