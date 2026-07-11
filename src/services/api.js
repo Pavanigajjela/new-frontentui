@@ -146,6 +146,112 @@ export const authAPI = {
   },
 };
 
+// ============ ADMIN AUTHENTICATION ENDPOINTS ============
+
+export const adminAuthAPI = {
+  login: async (email, password) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/internal/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const result = await handleResponse(response);
+
+      if (result.success) {
+        const authToken =
+          result.data?.accessToken || result.data?.token || null;
+        if (authToken) {
+          localStorage.setItem("accessToken", authToken);
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("isAdmin", "true");
+          localStorage.setItem("userEmail", result.data?.user?.email || email);
+          if (result.data?.refreshToken) {
+            localStorage.setItem("refreshToken", result.data.refreshToken);
+          }
+          if (result.data?.user) {
+            localStorage.setItem("userData", JSON.stringify(result.data.user));
+          }
+        }
+      }
+
+      return result;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+};
+
+// ============ ADMIN REPORTS & ORDER MANAGEMENT ENDPOINTS ============
+
+export const adminAPI = {
+  getOrdersReport: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/reports/orders`, {
+        method: "GET",
+        headers: getAuthHeaders(true, false),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  getRevenueReport: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/reports/revenue`, {
+        method: "GET",
+        headers: getAuthHeaders(true, false),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  getCoursesReport: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/reports/courses`, {
+        method: "GET",
+        headers: getAuthHeaders(true, false),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  getUsersReport: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/reports/users`, {
+        method: "GET",
+        headers: getAuthHeaders(true, false),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  refundOrder: async (orderId) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/admin/orders/${orderId}/refund`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(true, false),
+        }
+      );
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+};
+
 // ============ USER ENDPOINTS ============
 
 export const userAPI = {
@@ -476,6 +582,7 @@ export const apiUtils = {
   clearAuth: () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("isAdmin");
     localStorage.removeItem("userData");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("refreshToken");
@@ -521,6 +628,8 @@ export const apiUtils = {
 export default {
   API_BASE_URL,
   authAPI,
+  adminAuthAPI,
+  adminAPI,
   userAPI,
   otpAPI,
   registerAPI,

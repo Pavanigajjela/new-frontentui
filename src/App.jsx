@@ -10,6 +10,7 @@ import ForgotPassword from "./Login/ForgotPassword";
 import ResetPassword from "./Reset/ResetPassword";
 import LandingPage from "./LandingPage";
 import LoginWithOTP from "./Login/LoginWithOTP"; // Verify Login OTP
+import AdminLogin from "./Admin/AdminLogin"; // Admin login
 import Profile from "./pages/Profile"; // User profile management
 import ErrorBoundary from "./components/ErrorBoundary"; // Error handling
 import ProtectedRoute from "./components/ProtectedRoute"; // Route protection
@@ -52,6 +53,9 @@ function App() {
           
           {/* ===== LOGIN FLOW ===== */}
           <Route path="/login" element={<LoginPage />} />
+
+          {/* ===== ADMIN LOGIN FLOW ===== */}
+          <Route path="/admin/login" element={<AdminLogin />} />
           
           {/* ===== LOGIN WITH OTP FLOW ===== */}
           <Route path="/send-otp" element={<SendOTP />} />
