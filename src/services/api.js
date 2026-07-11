@@ -185,6 +185,73 @@ export const adminAuthAPI = {
   },
 };
 
+// ============ ADMIN REPORTS & ORDER MANAGEMENT ENDPOINTS ============
+
+export const adminAPI = {
+  getOrdersReport: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/reports/orders`, {
+        method: "GET",
+        headers: getAuthHeaders(true, false),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  getRevenueReport: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/reports/revenue`, {
+        method: "GET",
+        headers: getAuthHeaders(true, false),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  getCoursesReport: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/reports/courses`, {
+        method: "GET",
+        headers: getAuthHeaders(true, false),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  getUsersReport: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/reports/users`, {
+        method: "GET",
+        headers: getAuthHeaders(true, false),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  refundOrder: async (orderId) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/admin/orders/${orderId}/refund`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(true, false),
+        }
+      );
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+};
+
 // ============ USER ENDPOINTS ============
 
 export const userAPI = {
@@ -562,6 +629,7 @@ export default {
   API_BASE_URL,
   authAPI,
   adminAuthAPI,
+  adminAPI,
   userAPI,
   otpAPI,
   registerAPI,
