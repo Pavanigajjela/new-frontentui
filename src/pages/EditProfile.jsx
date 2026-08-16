@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { userAPI, apiUtils } from "../services/api";
+import {
+  getProfilePhoto,
+  readImageAsDataUrl,
+  setProfilePhoto as storeProfilePhoto,
+} from "../utils/profilePhoto";
 import "./EditProfile.css";
 
 const EditProfile = () => {
@@ -55,6 +60,9 @@ const EditProfile = () => {
         
         if (userData.profilePhoto) {
           setPhotoPreview(userData.profilePhoto);
+          storeProfilePhoto(userData.profilePhoto);
+        } else {
+          setPhotoPreview(getProfilePhoto() || null);
         }
       } else if (response.statusCode === 401) {
         apiUtils.clearAuth();
@@ -100,23 +108,14 @@ const EditProfile = () => {
     }
 
     // Show preview immediately with compression
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      // Create image element to check dimensions
-      const img = new Image();
-      img.onload = () => {
-        // If image is too large, compress it
-        if (img.width > 1024 || img.height > 1024) {
-          compressImage(event.target.result, (compressed) => {
-            setPhotoPreview(compressed);
-          });
-        } else {
-          setPhotoPreview(event.target.result);
-        }
-      };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
+    let localPhoto = null;
+    try {
+      localPhoto = await readImageAsDataUrl(file);
+      setPhotoPreview(localPhoto);
+    } catch {
+      setMessage({ text: "Could not read the selected image. Please try another one", type: "error" });
+      return;
+    }
 
     try {
       setPhotoLoading(true);
@@ -124,9 +123,10 @@ const EditProfile = () => {
 
       if (response.success) {
         setMessage({ text: "Profile photo updated successfully!", type: "success" });
-        if (response.data?.photoUrl) {
-          setProfile(prev => ({ ...prev, profilePhoto: response.data.photoUrl }));
-        }
+        const photo = response.data?.photoUrl || localPhoto;
+        setProfile(prev => ({ ...prev, profilePhoto: photo }));
+        setPhotoPreview(photo);
+        storeProfilePhoto(photo);
         setTimeout(() => setMessage({ text: "", type: "" }), 3000);
       } else {
         setMessage({ text: response.message || "Failed to upload photo", type: "error" });
@@ -149,36 +149,6 @@ const EditProfile = () => {
     }
   };
 
-  // Compress image function
-  const compressImage = (dataUrl, callback) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
-      const maxSize = 800;
-      
-      if (width > height) {
-        if (width > maxSize) {
-          height = (height * maxSize) / width;
-          width = maxSize;
-        }
-      } else {
-        if (height > maxSize) {
-          width = (width * maxSize) / height;
-          height = maxSize;
-        }
-      }
-      
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-      callback(canvas.toDataURL('image/jpeg', 0.8));
-    };
-    img.src = dataUrl;
-  };
-
   // Remove/Reset photo
   const removePhoto = async () => {
     try {
@@ -189,6 +159,7 @@ const EditProfile = () => {
       // For now, just clear locally
       setPhotoPreview(null);
       setProfile(prev => ({ ...prev, profilePhoto: "" }));
+      storeProfilePhoto("");
       setMessage({ text: "Profile photo removed", type: "success" });
       setTimeout(() => setMessage({ text: "", type: "" }), 3000);
       setShowPhotoOptions(false);

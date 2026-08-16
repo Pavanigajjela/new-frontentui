@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../services/api';
+import { setProfilePhoto } from '../utils/profilePhoto';
 import '../OTP/VerifyOTP.css'; // reuse OTP verification CSS
 
 const LoginWithOTP = () => {
@@ -137,6 +138,10 @@ const LoginWithOTP = () => {
         // Store user data
         if (data.data) {
           localStorage.setItem('userData', JSON.stringify(data.data));
+          const photo = data.data.profilePhoto || data.data.user?.profilePhoto;
+          if (photo) {
+            setProfilePhoto(photo);
+          }
         }
         
         // Clear login email from storage

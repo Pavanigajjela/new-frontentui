@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { API_BASE_URL } from '../services/api';
+import { setProfilePhoto } from '../utils/profilePhoto';
 import "./LoginPage.css";
 
 function LoginPage() {
@@ -86,6 +87,9 @@ function LoginPage() {
           // Store user data
           const userData = data.data?.user || data.data || { email: email };
           localStorage.setItem("userData", JSON.stringify(userData));
+          if (userData.profilePhoto) {
+            setProfilePhoto(userData.profilePhoto);
+          }
           
           console.log("✅ Login successful! Token stored:", authToken.substring(0, 20) + "...");
           setMessage("Login Successful ✅ Redirecting...");

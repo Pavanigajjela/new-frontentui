@@ -5,6 +5,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./LandingPage.css";
 import { authAPI, apiUtils } from "./services/api"; // Import API services
+import { useProfilePhoto } from "./utils/profilePhoto";
 import { useNavigate } from "react-router-dom";
 
 // Icon CDN imports
@@ -112,6 +113,7 @@ const LandingPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const profilePhoto = useProfilePhoto();
   
   // Cart & Wishlist State
   const [cartItems, setCartItems] = useState([]);
@@ -628,14 +630,22 @@ const LandingPage = () => {
                 </div>
                 <div className="user-dropdown">
                   <div className="user-trigger" onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                    <div className="avatar">{userName.charAt(0).toUpperCase()}</div>
+                    <div className="avatar">
+                      {profilePhoto
+                        ? <img src={profilePhoto} alt={userName} />
+                        : userName.charAt(0).toUpperCase()}
+                    </div>
                     <span className="user-name">Hi, {userName.split(' ')[0]}</span>
                     <span>{showProfileMenu ? "▲" : "▼"}</span>
                   </div>
                   {showProfileMenu && (
                     <div className="dropdown-menu">
                       <div className="dropdown-header">
-                        <div className="avatar-lg">{userName.charAt(0)}</div>
+                        <div className="avatar-lg">
+                          {profilePhoto
+                            ? <img src={profilePhoto} alt={userName} />
+                            : userName.charAt(0).toUpperCase()}
+                        </div>
                         <div><strong>{userName}</strong><p>{userEmail}</p></div>
                       </div>
                       

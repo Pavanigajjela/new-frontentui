@@ -1,4 +1,6 @@
 // src/services/api.js
+import { clearProfilePhoto, setProfilePhoto } from "../utils/profilePhoto";
+
 const DEFAULT_API_BASE_URL = "https://matted-ascent-specimen.ngrok-free.dev";
 
 export const API_BASE_URL =
@@ -95,6 +97,9 @@ export const authAPI = {
         if (result.data.user) {
           localStorage.setItem("userData", JSON.stringify(result.data.user));
           localStorage.setItem("userEmail", result.data.user.email || email);
+          if (result.data.user.profilePhoto) {
+            setProfilePhoto(result.data.user.profilePhoto);
+          }
         } else if (result.data.email) {
           localStorage.setItem("userEmail", result.data.email);
         }
@@ -121,6 +126,9 @@ export const authAPI = {
         localStorage.setItem("userEmail", email);
         if (result.data.user) {
           localStorage.setItem("userData", JSON.stringify(result.data.user));
+          if (result.data.user.profilePhoto) {
+            setProfilePhoto(result.data.user.profilePhoto);
+          }
         }
       }
       
@@ -229,9 +237,7 @@ export const userAPI = {
       const result = await handleResponse(response);
       
       if (result.success && result.data?.photoUrl) {
-        const currentUserData = JSON.parse(localStorage.getItem("userData") || "{}");
-        currentUserData.profilePhoto = result.data.photoUrl;
-        localStorage.setItem("userData", JSON.stringify(currentUserData));
+        setProfilePhoto(result.data.photoUrl);
       }
       
       return result;
@@ -261,9 +267,7 @@ export const userAPI = {
       const result = await handleResponse(response);
       
       if (result.success) {
-        const currentUserData = JSON.parse(localStorage.getItem("userData") || "{}");
-        delete currentUserData.profilePhoto;
-        localStorage.setItem("userData", JSON.stringify(currentUserData));
+        setProfilePhoto("");
       }
       
       return result;
@@ -481,6 +485,8 @@ export const apiUtils = {
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("tempUserData");
     localStorage.removeItem("userProfiles");
+    localStorage.removeItem("pendingPhotoFile");
+    clearProfilePhoto();
   },
 
   getAuthToken: () => {
