@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { userAPI, apiUtils } from "../services/api";
+import { getProfilePhoto, setProfilePhoto } from "../utils/profilePhoto";
 import "./Profile.css";
 
 const Profile = () => {
@@ -45,11 +46,15 @@ const Profile = () => {
           state: userData.state || "",
           country: userData.country || "",
           organization: userData.organization || "",
-          profilePhoto: userData.profilePhoto || "",
+          profilePhoto: userData.profilePhoto || getProfilePhoto(),
         });
         
         // Store in localStorage for backup
         localStorage.setItem("userData", JSON.stringify(userData));
+
+        if (userData.profilePhoto) {
+          setProfilePhoto(userData.profilePhoto);
+        }
       } else if (response.statusCode === 401) {
         apiUtils.clearAuth();
         navigate("/login");

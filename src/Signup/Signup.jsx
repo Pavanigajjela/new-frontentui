@@ -10,6 +10,7 @@ import {
   validatePassword,
   getPasswordStrength 
 } from "../utils/validation";
+import { readImageAsDataUrl, setProfilePhoto, clearProfilePhoto } from "../utils/profilePhoto";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -99,7 +100,7 @@ const Signup = () => {
   };
 
   // Handle file upload
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -116,19 +117,21 @@ const Signup = () => {
 
     setPhotoLoading(true);
     setFormData(prev => ({ ...prev, profilePhoto: file }));
-    
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setProfilePreview(event.target.result);
+
+    try {
+      setProfilePreview(await readImageAsDataUrl(file));
+    } catch {
+      setMessage({ text: 'Could not read the selected image. Please try another one.', type: 'error' });
+    } finally {
       setPhotoLoading(false);
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   // Remove photo
   const removePhoto = () => {
     setProfilePreview(null);
     setFormData(prev => ({ ...prev, profilePhoto: null }));
+    clearProfilePhoto();
     setMessage({ text: 'Photo removed', type: 'success' });
     setTimeout(() => setMessage({ text: '', type: '' }), 2000);
   };
@@ -233,8 +236,9 @@ const Signup = () => {
         localStorage.setItem("userEmail", formData.email);
         localStorage.setItem("tempUserData", JSON.stringify(formData));
         
-        if (formData.profilePhoto instanceof File) {
+        if (profilePreview) {
           localStorage.setItem("pendingPhotoFile", "true");
+          setProfilePhoto(profilePreview);
         }
 
         setTimeout(() => {
